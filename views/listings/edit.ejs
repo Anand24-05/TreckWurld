@@ -1,35 +1,35 @@
 <% layout("/layouts/boilerplate.ejs") %>
-<body>
+
   <div class="row">
     <div class="col-8 offset-2">
-    <form action="/listing/<%= listing._id%>?_method=PUT" method="POST">
+    <form action="/listing/<%= listing._id%>?_method=PUT" method="POST" class="needs-validation" novalidate>
 
       <div class="mb-3">
         <label for="title" class="form-label">Title</label>
-        <input type="text" name="listing[title]" value="<%= listing.title %>" class="form-control">
+        <input type="text" name="listing[title]" value="<%= listing.title %>" class="form-control" required>
       </div>
 
       <div class="mb-3">
         <label for="description" class="form-label">Description</label>
-        <textarea name="listing[description]" class="form-control"><%= listing.description %></textarea>
+        <textarea name="listing[description]" class="form-control" required><%= listing.description %></textarea>
       </div>
   
 
       <div class="mb-3">
         <label for="image" class="form-label">Image URL</label>
-        <input type="text" name="listing[image]" value="<%= listing.image %>" class="form-control">
+        <input type="text" name="listing[image]" value="<%= listing.image %>" class="form-control" required>
       </div>
   
 
       <div class="mb-3">
         <label for="price" class="form-label">Price</label>
-        <input type="number" name="listing[price]" value="<%= listing.price %>" class="form-control">
+        <input type="number" name="listing[price]" value="<%= listing.price %>" class="form-control" required>
       </div>
   
 
       <div class="mb-3">
         <label for="location" class="form-label">Location</label>
-        <input type="text" name="listing[location]" value="<%= listing.location %>" class="form-control">
+        <input type="text" name="listing[location]" value="<%= listing.location %>" class="form-control" required>
       </div>
   
 
@@ -37,4 +37,5 @@
       </form>
     </div>
   </div>
-</body>
+ 
+

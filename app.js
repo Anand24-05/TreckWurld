@@ -65,12 +65,15 @@ app.get("/listing/new",(req, res)=>{
 });//here we cave created a new listing
 
 //now to add it to the listings
-app.post("/listing", async (req, res) => {
-  console.log(req.body); // 👈 CHECK THIS
-
-  const newListing = new Listing(req.body.listing);
+app.post("/listing", async (req, res, next) => {
+try{  
+    const newListing = new Listing(req.body.listing);
   await newListing.save();
   res.redirect("/listing");
+}catch(err){
+    next(err)
+}
+
 });
 
 
@@ -120,6 +123,13 @@ app.delete("/listing/:id", async(req, res)=>{
      res.redirect("/listing");
     
 })
+
+//error handling middlewere
+app.use((err, req, res, next)=> {
+    res.send("something went wrong");
+});
+
+//listen
 app.listen(port, ()=>{
     console.log(`app is listening on http://localhost:${port}`);
 
