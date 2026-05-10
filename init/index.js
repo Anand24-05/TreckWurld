@@ -3,7 +3,8 @@ const intiData = require("./data.js");
 const Listing = require("../models/listing.js");
 
 //connecting with mongodb server
-const my_Url = "mongodb://127.0.0.1:27017/wonderlust";
+
+require('dotenv').config();
 
 main().then(()=>{
     console.log("connected to db");
@@ -13,7 +14,7 @@ main().then(()=>{
 });
 
 async function main(){
-    await mongoose.connect(my_Url);
+    await mongoose.connect(process.env.my_Url);
 } 
 
 const intiDb = async ()=>{

@@ -4,6 +4,9 @@ const path = require("path");
 const port = 8080;
 const mongoose = require("mongoose");
 
+//require wrapAsync
+const wrapAsync = require("./utils/wrapAsync.js");
+
 //require listing schema
 const Listing = require("./models/listing.js");
 
@@ -15,6 +18,9 @@ const methodOverride =  require("method-override");
 
 //ejs mate for styling
 const ejsMate = require("ejs-mate");
+
+//require ExpressErro.js
+const ExpressError = require("./utils/ExpressErro.js")
 
 
 //setting views engine
@@ -65,16 +71,12 @@ app.get("/listing/new",(req, res)=>{
 });//here we cave created a new listing
 
 //now to add it to the listings
-app.post("/listing", async (req, res, next) => {
-try{  
+app.post("/listing", wrapAsync(async (req, res, next) => {
     const newListing = new Listing(req.body.listing);
   await newListing.save();
   res.redirect("/listing");
-}catch(err){
-    next(err)
-}
 
-});
+}));
 
 
 //creating a listing/:id page
@@ -109,11 +111,11 @@ app.get("/listing/:id/edit", async (req, res)=>{
 });
 
 //update route
-app.put("/listing/:id", async (req, res)=>{
+app.put("/listing/:id", wrapAsync(async (req, res)=>{
     let {id}= req.params
    await Listing.findByIdAndUpdate(id, {...req.body.listing});
     res.redirect(`/listing/${id}`);
-});
+}));
 
 //delete
 app.delete("/listing/:id", async(req, res)=>{
@@ -124,9 +126,21 @@ app.delete("/listing/:id", async(req, res)=>{
     
 })
 
+//route for all the pages
+app.use((req, res, next) => {
+    next(new ExpressError(404, "Page Not Found!"));
+});
+
+
 //error handling middlewere
+// app.use((err, req, res, next)=> {
+//     res.send("something went wrong");
+// });
+//another way
 app.use((err, req, res, next)=> {
-    res.send("something went wrong");
+    let {status =500, message="Something went wrong"} = err;
+    // res.status(status).send(message);
+    res.status(status).render("listings/error.ejs", {message});
 });
 
 //listen
