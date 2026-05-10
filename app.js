@@ -54,9 +54,11 @@ async function main(){
 }
 
 
-app.get("/", (req, res)=>{
-    res.send("working successfully");
-});
+app.get("/", async (req, res)=>{
+    const Listings = await Listing.find({});
+    res.render("./listings/index.ejs", {Listings});
+    
+})
 
 //creating a listing page
 app.get("/listing", async (req, res)=>{
